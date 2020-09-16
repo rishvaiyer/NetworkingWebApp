@@ -1,0 +1,553 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Tutorial Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+    <style>
+        body {
+           
+        }
+        #nodeHeader {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 20%;
+        }
+
+        #header {
+            margin-bottom: 2%;
+        }
+
+        .sectionHeading {
+            color: #222;
+            width: 100%;
+            font-size:30px;
+            font-weight: bolder;
+            text-align: center;
+            background-color: darkseagreen;
+     
+        }
+
+        .containerContent {
+            width: 70%;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 10%;
+            font-size: 20px;
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        .bold {
+            color:mediumseagreen;
+            font-weight:bolder;
+            text-decoration:underline;
+        }
+        .boldHistory {
+            color: black;
+            font-weight:bolder;
+            text-decoration:underline;
+          
+        }
+        .Pros {
+            color:black;
+            font-weight:bolder;
+        }
+        .important {
+            font-weight: bold;
+        }
+        .note {
+            font-style:italic;
+            font-size: 14px;
+        }
+
+        .image {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .checkpoint {
+            font-weight: bolder;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+         color: palegreen;
+         background-color: black;
+         width: 50%;
+         text-align:center;
+        }
+
+        .warning {
+            color: red;
+            font-weight: bolder;
+        }
+
+        #resize {
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">NETW0RK</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="viewJobs.html">All Jobs</a></li>
+                <li><a href="Chat.html">Chat</a></li>
+                <li><a href="Inbox.html">Inbox</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="SignUp.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li id="logOff"><a href="index.html" onclick="logOff()"><span class="glyphicon glyphicon-log-in"></span> LogOff</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="containerContent">
+        <div id="header">
+            <img id="nodeHeader" src="images/NODEyes.png" />
+        </div>
+        <div class="history">
+            <div class="sectionHeading">
+                HISTORY
+
+            </div>
+            <br />
+            <span class="center"> [Node.js, MongoDB, Socket.io, Express JS]</span>
+            <br />
+
+
+            <span class="bold">Node.js</span>  - Node.js is a framework that runs JavaScript on the server.
+            It is primarily used for non-blocking, event driven servers, because of its single threaded nature.
+            It was designed with real-time, push based (when a client requests work from a server) architectures in mind.
+            Node uses asynchronous programming, which in simpler terms, means you can execute multiple things at a time, and you don’t have to wait to finish executing the current thing in order to move on to the next one!
+            <br />
+            <span class="boldHistory">History</span>  - Node.js was first created in 2009, by Ryan Dahl. Node.js was inspired after it’s creator was challenged by the problem and complexity of updating a progress meter on a web page, for uploading files with Ruby web servers.
+            <br /><br />
+            <span class="Pros">It is...</span>
+            <br />
+            <ul>
+
+                <li> Lightweight and efficient</li>
+                <li>Perfect for real-time applications (such as our chat demo)</li>
+                <li> Works great with NoSQL databases, like MongoDB</li>
+                <li>Can build fast and scalable applications</li>
+
+            </ul>
+
+
+
+            <br /><br />
+            <span class="bold">Socket.IO</span>  - a library that enables real-time, bidirectional and event-based communication between browser and server.
+            <br />
+            <span class="boldHistory">History</span>  Socket.IO was created in 2010. It was developed to open connections in order to facilitate real time communication, as it allows bi-directional communication between client and server.
+            <br /><br />
+
+            <span class="bold">MongoDB</span> - A NoSQL database, used by many modern Node-based web applications. Unlike relational databases, like we are used to with MySQL,  MongoDB does not use rows and tables, instead it uses collections of JSON data.
+            <br />
+            <span class="boldHistory">History</span>  - MongoDB was developed in 2007, it was intended to be an alternate solution to a traditional relational database, for applications where the tables and rows system was not the best match for that particular web application.
+
+
+
+        </div>
+        <br /><br />
+
+        <div class="Setup">
+            <div class="sectionHeading">
+                SETUP
+
+            </div>
+            <br />
+            Now that you have some background on the technologies used to build our web application, let's talk through how to build the chat portion of our application!
+
+            <br /><br />
+            Let’s start with setup, to make sure we have all the necessary components downloaded and ready before we start programming.
+            <br /><br />
+
+
+            Download Node.js <a href="https://nodejs.org/en/download/"> here </a>
+            <br />
+
+            <span class="note"> *  Make sure you choose the LTS Version </span>
+
+            <img class="image" src="tutorialImages/image10.png" />
+            <br />
+            <br />
+            By downloading node, you are also downloading the node packet manager.
+            After download and installation, check to make sure you have both of these downloaded by using terminal and typing in node -v, and npm -v, you should see the version numbers of both if you correctly downloaded.
+            <br /><br />
+            <span class="checkpoint">
+                [ CHECKPOINT ]
+            </span>
+            <br />
+            <img class="image" src="tutorialImages/image13.png" />
+
+            <br />
+            <span class="note">Node packet manager is used to publish packages and manage dependencies.</span><br /><br />
+            Next let’s go ahead and download MongoDB Atlas and MongoDB Compass. <br />
+            MongoDB Atlas can be found <a href="https://www.mongodb.com/cloud/atlas"> here </a>
+            <br /><br />
+            <span class="bold">MongoDB Compass </span>is a GUI for MongoDB, so we can see what’s in the database, add collections,
+            edit, delete, ect, instead of having to work with code, and it can be found <a href="https://www.mongodb.com/products/compass"> here </a>
+            <br /><br />
+            Using <span class="bold">MongoDB Atlas</span> we are going to create a cluster, name the cluster, wait a few minutes because it takes some time for new clusters to provision, create a user, whitelist IP address.  Make sure you switch to the free option, called ‘Shared Clusters’ as shown below.
+            <br /><br />
+            <img class="image" src="tutorialImages/image2.png" />
+
+            <br /><br />
+            We are just going to use the default settings provided, as shown below, then go to the next step.
+            <br />
+            <img class="image" src="tutorialImages/image8.png" />
+            <span class="note">* Whitelisting your IP address just means a list of trusted IP addresses so you can connect.</span>
+
+            <img class="image" src="tutorialImages/image6.png" />
+
+            After you add all IP Addresses that need to be added, and create a MongoDB User, click next and we will get our connection string to connect our application to our cluster! Make sure you remember your username and password because you will need it later on for your connection string and connecting to MongoDB Compass.
+            <br /><br />
+
+            Now let’s create a new visual studio <span class="bold">‘Node.js with Express’</span> project.
+            <br />
+            <img class="image" src="tutorialImages/image4.png" />
+
+            <span class="note"> Express js - Node by itself isn’t too great at serving web pages, Express Js allowed us to deploy the web application quickly, serve our static files,  and easily handle the API parts of the code (app.post)</span>
+
+            <br /><br />
+            Visual studio automatically creates an app.js file and a package.json file for us (where our dependencies and general program attributes will be defined).
+
+
+            *screenshots of these folders*
+
+
+            <br /><br />
+            Next we are going to download Socket.IO and MongoDB driver in Visual Studios using the npm packet manager directly in visual studios. <br />Right click on npm in the Solution explorer and click ‘Install New Packages’. <br /> Install both the mongoDB driver and Socket.IO. <br /> Make sure the default setting of ‘Add to package.json’ is checked.
+            <br />
+
+
+            <br />
+
+            <span class="note">These can also be installed using npm in the command line. It makes no difference!</span>
+            <br /><br />
+
+
+
+
+            All of the dependencies we have installed so far will be in our 'package.json' file.
+            <br />
+            <br /><br />
+            <span class="checkpoint">
+                [ CHECKPOINT ]
+            </span>
+            Open up the package.json file to make sure it has socket.io and mongodb which we just installed.
+            <br />
+
+            <img class="image" src="tutorialImages/image5.png" />
+
+            <br /><br />
+
+
+
+
+        </div>
+
+        <div class="programming">
+            <div class="sectionHeading">
+                LET'S START CODING
+
+            </div>
+            <br />
+            Ok, let’s start programming!
+            <br />
+            <br />
+            Open up your App.js file that Visual Studios created for you. First we need to ‘require’ (initialize) our dependencies we downloaded using npm packet manager in this file. <br /><br />
+            We will be initializing socket.io, and express using the following syntax:<br /><br />
+            <img class="image" src="tutorialImages/image1.png" />
+            <br />
+            We also want to use var http = require(‘http’) in order to create the http server which will respond to our requests.
+            Socket.io will be listening to our http server object.
+            <br /><br />
+            Now we are going to start working with socket.io.
+            What the io.on function below is doing is having the server listen on every connection.
+            Every single socket io thing that happens, will happen inside of this io.on function.
+            Once a connection has been made, events can happen.
+            It is important to note, that when a socket running on a client is connected to the server, it is given a unique id.
+            It never gets the same id. Even when you refresh the page, it gets a unique id when it connects again.
+            <br /><br />
+            <img class="image" src="tutorialImages/image7.png" />
+
+            <br /><br />
+            We also need to tell the server which port to listen on, which we set as port 3000 in this example.
+            You can set it to any port number, it doesn’t matter, just make sure when you want to run/test your program you are typing in that port # in the URL.
+
+            <br /><br />
+
+            <span class="checkpoint">
+                [ CHECKPOINT ]
+            </span>
+            <br />
+
+            Let’s run our program now to make sure everything is working correctly so far.
+            We should see this message when we run:
+            <img class="image" src="tutorialImages/image9.png" />
+
+            <br /><br />
+
+            Let’s now also set up our Mongo connection by using our connection string we got from Mongo.<br /><br />
+            This connection will also go in 'App.js' Use the username and password you created when making your database user.
+
+            <img class="image" src="tutorialImages/image3.png" />
+
+
+            <br /><br />
+            Few more things we need to include in our App.js file for now:
+            The bodyparser is middleware that formats the data sent in our POSTS to some type. In our case, we are using json.
+            <br />
+            And we are using express middleware to serve our static directory.
+            <img class="image" src="tutorialImages/image12.png" />
+            <br /><br />
+            As you saw in the demo, we have a signup page where you can choose to either sign up as an employer, or a student.<br /><br />
+            We won’t get much into the HTML, because it’s pretty self explanatory and nothing you guys haven’t seen before.<br /><br />
+            However, we do want to discuss how our Chat app is going to eventually ‘know’ who is who.<br /><br />
+            So once the user fills out a new profile, and signs up, they get put in the MongoDB. <br /><br />
+            We have two POST methods in App.js for signups, one for an employer signup, and one for student sign up. <br /><br />
+            Each of these will insert one object into the database, everytime a signup occurs.<br>
+
+
+            <img class="image" src="tutorialImages/image14.png" />
+
+            So as you can see, if it is an employer signing up they will be put into our companies collection, and if it is a student signup, they will be put into the students collection in our DB.
+            <br /><br />
+            So for this to work, in our SignUp.html page we have two functions, a makeEmployerProfile function and a makeStudentProfile function that run when their respective buttons are clicked upon signing up.
+            <br /><br />
+            In the makeEmployerProfile function we pass our /signupemployer POST the new employer object, and the same thing happens if it was a student, except it’s passed to /signupstudent.
+            These objects contain all the data that was inputted in the signup form, including username and password and Mongo automatically assigns each object an ID.
+            <img class="image" src="tutorialImages/image15.png" />
+            <br /><br />
+            <span class="checkpoint">
+                [ CHECKPOINT ]
+            </span>
+            Open up your MongoDB Compass and let’s make sure our DB is putting our new profiles in the correct Databases and everything is going smoothly.
+            If you signup as an employer the object should be in the ‘companies’ collection, and if you sign up as a student the object should be in the ‘students’ collection.
+
+            <img class="image" src="tutorialImages/image16.png" />
+            <br /><br />
+            Now let’s move on to how the login works, and the part it plays in our Chat app. <br /><br />
+            The login post methods are going to use a collection.findOne to find the first matching instance in the collection. <br /><br />
+            <br />
+            So in App.js we create two new POSTS, one for loginstudent, and one for loginemployer.
+            <br />
+            They are going to look like this:
+
+            <img class="image" src="tutorialImages/image17.png" />
+
+            So for the loginemployer it is searching through all companies, and finding the object where the username and password matches, and for the loginstudent it searches through all students and does the same thing.
+            <br /><br />
+            In our 'login.html' file we have two functions, studentLogin() and employerLogin(). Here we are going to be utilizing local storage and we will see why later on. When an employer logs in with their username and password we
+            find them from the database and then put them into localstorage as the activeUser,
+            also we put their ‘type’(employer or student) into localStorage as activeUserType.
+
+            <br /><br />
+            We are eventually going to be using this information in localStorage to see who is logged in and who is online.
+
+
+            <br /><br />
+            <span class="checkpoint">
+                [ CHECKPOINT ]
+            </span><br />
+            Let’s login as the employer or student you created in step 12 and then check local storage.
+
+            <img class="image" src="tutorialImages/image18.png" />
+
+            <br /><br />
+            Okay, now we are going to add some functionality to our Chat.html page.
+            <br /><br />
+            We need to make sure we have the jquery script and socket io scripts added to our page.<br />
+            <br /><br />
+            We also need to add a text input where the user will enter their message, a send button, and a dropdown that will eventually
+            display the list of users online.
+            <br /><br />
+            We need to have a function for when our ‘form’ is submitted. <br />
+            We get the value of the message from the textbox and call it 'message'.
+            <br /><br />
+            We then create a message object which consists of the message, the sender, and the recipient.
+            The recipient will be the value of the drop down selection. This will make more sense later if it
+            doesn't right now.
+            <br /><br />
+
+            And then we just emit a ‘SendingMessage’ event with the messageObject to the server side, and append the message to the div, in a outgoing row.
+            <img class="image" src="tutorialImages/image19.png" />
+            <br /><br />
+            <span class="note"> We are going to see the 'recievingMessage' event a little later.</span>
+            <br /><br />
+
+            So, now in our App.js file in our io.on(‘connection’, function(socket) {
+            We are going to first emit an event when a client connects to a socket. <br /><br />
+            The server is sending a ‘requestName’ event to the client side, to get the connectors identity.
+            <br /><br />
+            The syntax for this is just socket.emit('requestName');
+            <br />
+            <br />
+            So, when the client side receives the requestName event from the server side,  the callback function is going to create a new object called identityObj in order to send the identity of the person who just connected to the socket.
+            After the object is created we will send a sendName event to the server side, and send the identityObj we just created along with it.
+
+            <img class="image" src="tutorialImages/image20.png" />
+
+            <br />
+            So now we have to accept the ‘sendName’ event we got from the client side, with the identity object. <br /><br />
+            The callback function will create a new object called client,
+            and basically copy over the identity objects name, type, and userid, but will also add a ‘socket.id’
+            attribute.<br /> <br /> The reason we do this here, is because the unique socket ID is only available on the server side.
+            And then we push the new client object into a clients array.
+            <img class="image" src="tutorialImages/image21.png" />
+
+            Next, we are going to emit a ‘newUser’ object from the server to the client.
+
+            <br /><br />
+            <span class="warning">  Warning: There’s a lot of sending and receiving. It might get a little repetitive, but this is how sockets work!</span>
+            <br /><br />
+            Time to accept the newUser event on the client side.<br /><br />
+            The purpose of this event was telling our client that there was a new user connected,
+            so we can eventually update our Active Users drop down that shows everyone who is online. <br /><br />
+            Our callback function for this is just going to send a grabActive event back to the server side, and pass the activeUserType along with it.<br /><br />
+
+            <img class="image" src="tutorialImages/image22.png" />
+            Remember when we saved the active user and their type in local storage? That's where we got activeUserType, we just grabbed it from local storage and saved it as a variable.
+            <br />
+
+
+            Okay, you probably can guess what’s going to happen next by now.<br /><br />
+            We are going to accept the grabActive event on the server side and our callback function is going to have activeUserType as a parameter.<br />
+
+
+            We initalize an array of active users. <br /><br />
+            Then we are going to loop through our clients array and check to make sure for each client in the array the type is not the same as the current activeUsers type.
+            <br /><br />
+            If a client in our clients array does NOT have the same type, then we will push it to our activeUsers array. <br /><br />
+            This is because for our app we wanted students to only be able to talk to employers, and vice versa.
+            <img class="image" src="tutorialImages/image23.png" />
+            So we then emit a recievingActiveUsers event to the client, with the list of active users. <br />
+
+            <br />
+            Of course, the next step is to recieve it on the client side so we recieve the event and list of active users
+            and update our drop down with each active user being an option, and their corresponding socket.id number being the option value.
+
+            <img class="image" id="resize" src="tutorialImages/image25.png" />
+
+            Next we want to get any history with a particular user selected from the drop down so we emit an getHistory event, with the activeusers val as a parameter.<br /><br />
+            Since all our messages are stored in mongo we can grab the history on the server side and then display it on the client side.<br /><br />
+            <span class="note">(I will show you how they are stored in Mongo when we get to the 'RecievingMessage' event!)</span>
+            <br /><br />
+            <img class="image" id="resize" src="tutorialImages/image26.png" />
+            </br><br />
+
+            So we create an identities object. The argument passed down is called otherParty. otherParty is the socket id of the person the user has selected in the drop down. <br /><br />
+            Now we are going to loop through clients array. <br /><br />
+            We are looking for 2 things;
+            <br /><br />
+            1. We want the client from the clients array that has the same id as the client that caused this event.
+            <br />
+            That client is added to the identities object as the REQUSTOR, aka the one looking for the history.
+            <br /><br />
+            2. We look for the client matching the other party argument. That's added to the identity object as the client that is on the OTHER side of the chat.
+            <br />
+
+            <br />
+            Now are are going to query the chat collection in the DB, and we are looking for messages that match two things.
+            If the sender is the current user and the recipient is the other party, AND if the sender is the other party, and the recipient is me. <br />
+            Because we need to get all messages from the other party that were sent to us, and all messages we sent to them.
+            <br />
+            Then it gets sorted by chronological order, this works because we added a time stamp to the messages when storing them in the DB.
+            <br /><br />
+            Finally, we loop through the results and add an in or out value. It's a in value if the message sender was the other party, and it's a out value if we sent the message.
+
+            And of course, send the results over to the client side using an socket.emit('recievingHistory', results).
+            <br /><br />
+
+            Now on the client side we recieve the event and append the messages to display them. If they were labelled as 'outgoing' they will be in a outgoing div row, and incoming will be in a incoming div row.
+            <br /><br />
+            You just use css to style these rows to make them look like a chat, so they are displayed on different sides of the page.
+
+            <br /><br />
+            <img class="image" id="resize" src="tutorialImages/image28.png" />
+
+            <br /><br />
+
+            So remember when we sent a 'sendingMessage' event in our submit function when our form was submitted. The server side needs to recieve that event and store the message in the DB.
+            <br />
+            <img class="image" id="resize" src="tutorialImages/image29.png" />
+
+            <br /><br />
+            And then the client side will recieve the 'recievingMessage' event that the server side emitted, and append the message to the person it was sent to, along with the sender name.  
+            <br />
+            <img class="image" id="resize" src="tutorialImages/image30.png" />
+        </div>
+        <br /><br /><br /><br /><br />
+
+        <div class="Summary">
+            <div class="sectionHeading">
+                SUMMARY
+            </div>
+            Overall, Node.js is a really cool tool to learn and know how to use!
+            <br /><br />
+            This application only scraped the surface when it comes to Node’s abilities.
+            <br /><br />
+            There are tons of cool things you can do with Node and tons of helpful packages that help you do these things.
+            <br /><br />
+            If you have some time it’s a great skill to begin learning and also helps you get more comfortable connecting the client side and server side, atleast it did for me.
+            <br /><br />
+
+        </div>
+
+        <div class="Refrences">
+            <div class="sectionHeading">
+                REFRENCES AND RESOURCES
+            </div>
+
+            W3 Schools is a great resource for learning NodeJS while working with MongoDB you can find that <a href="https://www.w3schools.com/nodejs/nodejs_mongodb.asp"> here </a>
+            <br /><br />
+            The Socket.IO documentation can be found here <a href="https://socket.io/docs/"> here </a>
+            <br /><br />
+            MongoDB documentation can be found here  <a href="https://docs.mongodb.com/"> here </a>
+            <br /><br />
+            Express routing guide:  <a href="https://expressjs.com/en/guide/routing.html"> here </a>
+            <br /><br />
+            To learn more about Node JS these sites are also helpful:
+            <br /><br />
+            <a href="https://rollout.io/blog/node-js-tutorial/"> Beginner's guide to Node </a> <br /><br />
+            <a href="https://www.w3schools.com/nodejs/nodejs_intro.asp"> W3 Schools </a><br /><br />
+            <a href="https://www.youtube.com/watch?v=fBNz5xF-Kx4">Node js Crash Course (Video)</a> <br /><br />
+
+            
+        
+
+        </div>
+        </div>
+        <br />
+
+
+
+
+</body>
+</html>

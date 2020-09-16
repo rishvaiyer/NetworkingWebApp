@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <style>
+        .container {
+            margin: 3%;
+        }
+
+        .title {
+            color: steelblue;
+            font-weight: bold;
+        }
+
+        #jobs {
+            font-size: 15px;
+        }
+
+        #heading {
+            font-size: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: darkblue;
+            margin: 0 auto;
+        }
+
+        .name {
+            color: darkslategrey;
+        }
+        </style>
+    <script>
+        var jobString = "";
+        $(document).ready(function () {
+
+            $.post("/grabAllJobs")
+                .done(function (data) {
+                    console.log(data);
+                    if (data == "notfound") {
+                        alert("fail");
+                    } else {
+
+
+                        var activeUser = JSON.parse(localStorage.getItem("activeUser"));
+                        var lookingFor = activeUser.studentLookingFor;
+                        var experienceLevel = activeUser.studentExperience;
+                        var count = 0;
+                        for (i = 0; i < data.length; i++) {
+
+                            if (data[i].jobHours == lookingFor) {
+                                count++;
+
+                            }
+                            if (data[i].jobExperience == experienceLevel) {
+                                count++;
+
+
+                            }
+
+
+                        }
+
+                        $(".badge").html(count);
+
+                    }
+                });
+           
+            $.post("/grabAllJobs")
+                .done(function (data) {
+                    console.log(data);
+                    if (data == "notfound") {
+                        alert("fail");
+                    } else {
+
+                        for (i = 0; i < data.length; i++) {
+                            //Need to add job skills and hours 
+                            jobString += "<span class='title'>Company Name:</span>" + "  " + data[i].companyName + "<br>" +
+                                "<span class='title'>Job Title:</span>" + "  " + data[i].jobName + "<br>" +
+                                "<span class='title'>Job Type:</span>" + "  " + data[i].jobHours + "<br>" + +
+                                "<span class='title'>Job Skills:</span>" + "  " + data[i].jobSkills + "<br>" +
+                                "<span class='title'>Job Description:</span>" + "  " + data[i].jobDescription + "<br><br>";
+                            $("#heading").html("Jobs Posted By" + " " + data[1].companyName);
+                        }
+
+                        $("#jobs").html(jobString);
+                        $("#heading").html("<fieldset> <legend>" + "All Jobs" + " </legend>");
+                    }
+                });
+
+        });
+     
+
+
+
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">NETW0RK</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="studentDashboard.html">Home</a></li>
+                <li><a href="Chat.html"> Chat</a></li>
+                <li><a href="Tutorial.html"> Tutorial</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="SignUp.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="index.html"><span class="glyphicon glyphicon-log-in"></span> LogOff</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+
+    <div class="container">
+    <div id="heading">
+
+    </div>
+
+
+    <div id="jobs">
+
+
+    </div>
+
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,460 @@
+﻿<!doctype html>
+
+<html>
+
+<head>
+
+    <title>Chat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font: 13px Helvetica, Arial;
+        }
+
+        form {
+            background: #000;
+            padding: 3px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+            form input {
+                border: 0;
+                padding: 10px;
+                width: 90%;
+                margin-right: .5%;
+            }
+
+            form button {
+                width: 9%;
+                background: black;
+                color: white;
+                border: none;
+                padding: 10px;
+            }
+
+
+        #header {
+            margin-left: 2%;
+        }
+
+
+        #messages {
+            margin-bottom: 40px;
+            padding: 25px 0;
+        }
+
+        .messageRow {
+            margin: 15px 0;
+            display: flex;
+            flex-direction: row;
+            padding: 0 20px;
+        }
+
+        .outgoing {
+            justify-content: flex-end;
+        }
+
+        .incoming {
+            justify-content: flex-start;
+        }
+
+        .message {
+            display: inline-block;
+            text-align: start;
+            font-weight: 900;
+            padding: 20px;
+            color: #fff;
+            border-radius: 20px;
+        }
+
+        .messageRow.outgoing .name {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        .messageRow.incoming .name {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        .message.incoming {
+            background-color: dimgrey;
+        }
+
+        .message.outgoing {
+            background-color: lightgrey;
+        }
+
+        #typing {
+            position: fixed;
+            bottom: 50px;
+        }
+
+        #logged {
+            color: white;
+            font-size: 15px;
+            margin-top: 15px;
+            margin-right: 10px;
+        }
+
+        .labelForActiveUsers {
+            color: black;
+            font-weight: bolder;
+            background-color: white;
+            font-size: 20px;
+        }
+
+        #activeusers {
+            width: 10%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">NETW0RK</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="studentDashboard.html">Student Dashboard</a></li>
+                <li><a href="employeeDashboard.html">Employee Dashboard</a></li>
+
+                <li><a href="Chat.html">Chat</a></li>
+                <li><a href="Tutorial.html">Tutorial</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                <li id="logged"></li>
+            </ul>
+        </div>
+    </nav>
+
+
+
+    <div id="header">
+
+        <div>
+            <div class="labelForActiveUsers">People Online:</div>
+            <select id="activeusers"></select>
+        </div>
+    </div>
+
+    <div id="messages"></div>
+    <div id="typing"></div>
+    <form action="">
+
+        <input id="m" autocomplete="off" /><button id="sendBtn">Send</button>
+
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+
+        var delay = (function () {
+
+            var timer = 0;
+
+            return function (callback, ms) {
+
+                clearTimeout(timer);
+
+                timer = setTimeout(callback, ms);
+
+            };
+
+        })();
+
+
+
+        var typingTrigger = false;
+
+
+
+        var active = window.localStorage.getItem('user');
+
+
+
+        var name;
+
+        var activeUserType;
+
+        var userid;
+
+
+
+        if (window.localStorage.getItem('activeUser') === null || window.localStorage.getItem('activeUserType') === null) {
+
+            window.location.replace("index.html");
+
+        } else {
+
+            var activeUser = JSON.parse(window.localStorage.getItem('activeUser'));
+
+            activeUserType = window.localStorage.getItem('activeUserType');
+
+            userid = activeUser._id;
+
+            if (activeUserType == "student") {
+
+                name = activeUser.studentName;
+
+                $("#logged").text("Logged in as Student " + name);
+
+            } else if (activeUserType == "employer") {
+
+                name = activeUser.companyName;
+
+                $("#logged").text("Logged in as Company " + name);
+
+            }
+
+        }
+
+
+
+        var socket = io();
+
+        socket.emit('grabActive', activeUserType);
+
+        $('form').submit(function (e) {
+
+            var typingObj = new Object();
+
+            typingObj.name = name;
+
+            typingObj.recipient = $("#activeusers").val();
+
+            socket.emit('stopTyping', typingObj); e.preventDefault(); // prevents page reloading
+
+            var message = $('#m').val();
+
+            var messageObj = { body: message, sender: name, recipient: $("#activeusers").val() };
+
+            socket.emit('SendingMessage', messageObj);
+
+            $("#messages").append("<div class='messageRow outgoing'><div class='message outgoing'>" + message + "</div><div class='name'>You</div></div>");
+
+            $('#m').val('');
+
+            return false;
+
+        });
+
+
+
+        $('#m').keyup(function () {
+
+            delay(function () {
+
+                var typingObj = new Object();
+
+                typingObj.name = name;
+
+                typingObj.recipient = $("#activeusers").val();
+
+                socket.emit('stopTyping', typingObj);
+
+                typingTrigger = false;
+
+            }, 2000);
+
+        });
+
+
+
+        var i = 0;
+
+        $("#m").keyup(function () {
+
+            if (!typingTrigger) {
+
+                i++;
+
+                if (i > 1) {
+
+                    var typingObj = new Object();
+
+                    typingObj.name = name;
+
+                    typingObj.recipient = $("#activeusers").val();
+
+                    socket.emit('startTyping', typingObj);
+
+                    typingTrigger = true;
+
+                    i = 0;
+
+                }
+
+            }
+
+        });
+
+
+
+        $("#activeusers").change(function () {
+
+            $("#messages").empty();
+
+            socket.emit('getHistory', $("#activeusers").val());
+
+        });
+
+
+
+        socket.on('requestName', function () {
+
+            var identityObj = new Object();
+
+            identityObj.name = name;
+
+            identityObj.type = activeUserType;
+
+            identityObj.userid = userid;
+
+            socket.emit('sendName', identityObj);
+
+        });
+
+        socket.on('startTyping', function (name) {
+
+            $("#messages").append(`
+
+                            <div class= 'messageRow incoming' id='typingGIF'><div class='name'>`+ name + `</div><div class='message incoming'>
+
+                                <img src="images/typing.gif" height="15" />
+
+                            </div></div ></div> `);
+
+            $("#typing").append(name + " has started typing...");
+
+        });
+
+
+
+        socket.on('stopTyping', function (name) {
+
+            $("#typing").empty();
+
+            $("#typingGIF").remove();
+
+        });
+
+
+
+        socket.on('ReceivingMessage', function (messageObj) {
+
+            console.log(messageObj.sender);
+
+            console.log($("#activeusers").val());
+
+            if (messageObj.senderID == $("#activeusers").val()) {
+
+                $("#messages").append("<div class='messageRow incoming'><div class='name'>" + messageObj.sender + "</div><div class='message incoming'>" + messageObj.body + "</div ></div > ");
+
+
+
+            }
+
+        });
+
+
+
+        socket.on('receivingActiveUsers', function (messageObj) {
+
+            console.log(messageObj);
+
+            var activeusers = $("#activeusers");
+
+            activeusers.empty();
+
+            messageObj.forEach(function (active) {
+
+                activeusers.append("<option value='" + active.socketID + "'>" + active.name + "</option>");
+
+            });
+
+            socket.emit('getHistory', $("#activeusers").val());
+
+
+
+        });
+
+
+
+        socket.on('newUser', function (messageObj) {
+
+            socket.emit('grabActive', activeUserType);
+
+        });
+
+
+
+        socket.on('receivingHistory', function (messagesObj) {
+
+            $("#messages").empty();
+
+            messagesObj.forEach(function (message) {
+
+                if (message.direction == "out") {
+
+                    $("#messages").append("<div class='messageRow outgoing'><div class='message outgoing'>" + message.body + "</div><div class='name'>You</div></div>");
+
+
+
+                } else if (message.direction == "in") {
+
+                    $("#messages").append("<div class='messageRow incoming'><div class='name'>" + message.sender + "</div><div class='message incoming'>" + message.body + "</div ></div > ");
+
+
+
+                }
+
+            });
+
+            console.log(messagesObj);
+
+        });
+
+
+
+    </script>
+
+
+
+</body>
+
+
+
+</html>

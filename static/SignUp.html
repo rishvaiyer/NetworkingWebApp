@@ -1,0 +1,488 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+
+
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <style>
+
+
+        
+
+        .login-container {
+            
+   margin: 0 auto;
+   width: 50%;
+        }
+
+        .studentForm {
+            margin-top: 5%;
+            padding: 5%;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+            height: 50%;
+            width: 100%;
+            display: none;
+            background-color: black;
+            color: white;
+            margin-bottom: 5%;
+        }
+
+            .studentForm h3 {
+                text-align: center;
+                color: white;
+            }
+
+        .employerForm {
+            margin-top: 5%;
+            padding: 5%;
+            background: black;
+            width: 100%;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+            color: white;
+            height: 50%;
+            display: none;
+            margin-bottom: 5%;
+        }
+
+            .employerForm h3 {
+                text-align: center;
+                color: #fff;
+            }
+
+        .login-container form {
+            padding: 10%;
+        }
+
+        .btnSubmit {
+            width: 50%;
+            border-radius: 1rem;
+            padding: 1.5%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .studentForm .btnSubmit {
+            font-weight: 600;
+            color: black;
+            background-color: #fff;
+        }
+
+        .employerForm .btnSubmit {
+            font-weight: 600;
+            color: black;
+            background-color: #fff;
+        }
+
+        .alert {
+            display: none;
+        }
+
+        .selectSignUp {
+            float: right;
+
+        }
+
+        .intro {
+            margin: 0 auto;
+            width: 80%;
+            font-size: 60px;
+            text-align: center;
+
+        }
+      
+        #displayStudentForm, #displayEmployerForm, #setStorageButton, #clearStorageButton, #signInButton {
+            background-color: black;
+            color: white;
+            border-radius: 2px;
+            font-size: 20px;
+        }
+
+    </style>
+
+
+
+    <script>
+        function redirect() {
+            window.location.replace("index.html");
+        }
+        function displayEmployerForm() {
+
+          //  $(".intro").hide();
+            $(".studentForm").hide();
+          //  $("#EmployerButton").hide();
+          // $("#StudentButton").hide();
+            $(".employerForm").fadeIn();
+            $("#networkLogo").show();
+            $("#SignUpIntro").html("Employer Sign Up");
+
+        }
+
+        function displayStudentForm() {
+
+           // $(".intro").hide();
+            $(".employerForm").hide();
+         //   $("#StudentButton").hide();
+        //   $("#EmployerButton").hide();
+            $(".studentForm").fadeIn();
+            $("#networkLogo").show();
+            $("#SignUpIntro").html("Student Sign Up");
+
+        }
+        var studentArray = [
+            {
+                studentName: "Jane Doe",
+                studentEmail: "jane@gmail.com",
+                  studentUsername: "jane",
+                studentPassword: "jane",
+                studentProfilePic: "https://i.pinimg.com/564x/35/82/0e/35820e9ba133772fc6023397f619f89e.jpg",
+                  studentSkills: "Javascript, Java ,C#",
+                studentResume: "https://i.pinimg.com/736x/59/4b/1b/594b1b6211b57296cf011551a6780532.jpg",
+                studentBio: "Interested in AI and Machine Learning"
+            }];
+
+        var employerArray = [
+            {
+                companyName: "Dll",
+                companyEmail: "dll@dll.com",
+                companyUsername: "dll123",
+                companyPassword: "dll123"
+            }];
+
+
+        var studentLogArray = [];
+
+        var employerLogArray = [];
+        var jobArray = [
+            {
+                companyName: "Dll",
+                jobName: "Software Developer",
+                jobHours: "Summer Intern",
+                jobDescription: "Develop software"
+            }
+        ];
+
+        function clearStorage() {
+            localStorage.clear();
+            alert('Local Storage has been cleared');
+        }
+        function setStorage() {
+            localStorage.setItem("studentArray", JSON.stringify(studentArray));
+            localStorage.setItem("employerArray", JSON.stringify(employerArray));
+            localStorage.setItem("activeStudent", JSON.stringify(studentLogArray));
+            localStorage.setItem("activeEmployer", JSON.stringify(employerLogArray));
+            localStorage.setItem("jobs", JSON.stringify(jobArray));
+            alert('Storage has been set');
+            $("#setStorageButton").hide()
+        }
+
+        function makeEmployerProfile() {
+            companyName = $("#companyName").val();
+            companyEmail = $("#companyEmail").val();
+            companyUsername = $("#companyUsername").val();
+            companyPassword = $("#companyPassword").val();
+            companyBio = $("#companyBio").val();
+            companyProfilePic = $("#companyProfilePic").val();
+
+
+            var employer = {
+                companyName: companyName,
+                companyEmail: companyEmail,
+                companyUsername: companyUsername,
+                companyPassword: companyPassword,
+                companyBio: companyBio,
+               companyProfilePic : companyProfilePic
+            }
+
+            //var employerArray2 = JSON.parse(localStorage.getItem("employerArray"));
+            //employerArray2.push(employer);
+            //localStorage.setItem("employerArray", JSON.stringify(employerArray2));
+            $.post("/signupemployer", employer)
+                .done(function (data) {
+                    alert("Thanks for signing up " + companyName + " your may now log in!");
+                    // Simulate an HTTP redirect:
+                    window.location.replace("index.html");
+                });
+
+        }
+
+
+        function makeStudentProfile() {
+            studentName = $("#studentName").val();
+            studentEmail = $("#studentEmail").val();
+            studentUsername = $("#studentUsername").val();
+            studentPassword = $("#studentPassword").val();
+            studentProfilePic =  $("#studentProfilePic").val();
+            studentSkills = $("#studentSkills").val();
+            studentResume = $("#studentResume").val();
+            studentBio = $("#studentBio").val();
+            studentExperience = $("#studentExperience").val();
+            studentMajor = $("#studentMajor").val();
+            studentLookingFor = $("#studentLookingFor").val();
+            studentCollege = $("#studentCollege").val();
+            studentProfilePicLink = $("#studentProfilePicLink").val();
+
+            var student = {
+                studentName: studentName,
+                studentEmail: studentEmail,
+                studentUsername: studentUsername,
+                studentPassword: studentPassword,
+                studentProfilePic: studentProfilePic,
+                studentSkills: studentSkills,
+                studentResume: studentResume,
+                studentBio: studentBio,
+                studentExperience: studentExperience,
+                studentCollege: studentCollege,
+                studentMajor: studentMajor,
+                studentLookingFor: studentLookingFor,
+                studentProfilePicLink : studentProfilePicLink
+
+            };
+
+          
+            $.post("/signupstudent", student)
+                .done(function (data) {
+                    alert("Thanks for signing up " + studentName + " your may now log in!");
+                    window.location.replace("index.html");
+                });
+
+
+        }
+  //var studentArray2 = JSON.parse(localStorage.getItem("studentArray"));
+            //studentArray2.push(student);
+            //localStorage.setItem("studentArray", JSON.stringify(studentArray2));
+    </script>
+</head>
+<body>
+
+    <div class="intro">
+
+        NETW0RK SIGNUP
+        <br />
+
+        <button id="displayStudentForm" onclick="displayStudentForm()"> Student Signup </button>
+        <button id="displayEmployerForm" onclick="displayEmployerForm()"> Employer Signup</button>
+        <button id="signInButton" onclick="redirect()">  Sign In</button>
+        <!--<input type="button" id="setStorageButton" value="Set Storage" onclick="setStorage()" />
+    <input type="button" id="clearStorageButton" value="Clear Storage" onclick="clearStorage()" />-->
+    </div>
+
+   
+    <div class="container login-container">
+        <div class="row">
+            <div class="col-md-6 employerForm">
+                <h3>Employer Signup</h3>
+
+                <div class="form-group">
+
+
+
+                    <label for="companyName">Company Name</label>
+                    <input type="text" class="form-control col-6" id="companyName" placeholder="Google">
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="companyEmail">Company Email</label>
+                    <input type="email" class="form-control col-6" id="companyEmail" placeholder="name@example.com">
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="companyUsername">Company Username</label>
+                    <input type="text" class="form-control col-6" id="companyUsername" placeholder="google1">
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="companyPassword">Company Password</label>
+                    <input type="password" class="form-control col-6" id="companyPassword" placeholder="*******">
+                </div>
+
+                <div class="form-group">
+
+                    <label for="companyProfilePic">Company Profile Pic</label>
+                    <input type="text" class="form-control col-6" id="companyProfilePic" placeholder="google.png">
+                </div>
+
+
+
+
+                <div class="form-group">
+                    <label for="companyBio">Add a short bio and let future employees know what you do!</label>
+                    <textarea class="form-control col-6" id="companyBio" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" class="btnSubmit" value="Submit" onclick="makeEmployerProfile()" />
+                </div>
+
+
+
+
+
+
+
+            </div>
+            <div class="col-md-6 studentForm">
+                <h3>Student Signup</h3>
+                <div class="form-group">
+
+
+
+                    <label for="studentName"> Name</label>
+                    <input type="text" class="form-control col-6" id="studentName" placeholder="John Doe">
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="studentEmail"> Email</label>
+                    <input type="email" class="form-control col-6" id="studentEmail" placeholder="name@example.com">
+                </div>
+
+                <div class="form-group">
+
+                    <label for="studentUsername"> Username</label>
+                    <input type="text" class="form-control col-6" id="studentUsername" placeholder="google1">
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="studentPassword"> Password</label>
+                    <input type="password" class="form-control col-6" id="studentPassword" placeholder="*******">
+                </div>
+
+                <div class="form-group">
+
+                    <label for="studentCollege"> College</label>
+                    <input type="text" class="form-control col-6" id="studentCollege" placeholder="Temple">
+                </div>
+                <div class="form-group">
+
+                    <label for="studentMajor"> Major</label>
+                    <input type="text" class="form-control col-6" id="studentMajor" placeholder="IST">
+                </div>
+                <div class="form-group">
+
+                    <label for="studentProfilePicLink"> Profile Pic Link</label>
+                    <input type="text" class="form-control col-6" id="studentProfilePicLink" placeholder="me.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="studentSkills"> Skills (Select all that apply)</label>
+                    <select multiple class="form-control col-6" id="studentSkills">
+                        <option>Java</option>
+                        <option>HTML/CSS</option>
+                        <option>C</option>
+                        <option>C#</option>
+                        <option>C++</option>
+                        <option>Node.Js</option>
+                        <option>React</option>
+                        <option>jQuery</option>
+                        <option>Javascript</option>
+                        <option>MySQL</option>
+                        <option>MongoDB</option>
+                        <option>Swift</option>
+                        <option>PHP</option>
+                        <option>AJAX</option>
+                        <option>Perl</option>
+                        <option>Python</option>
+                        <option>Ruby</option>
+                        <option>Scala</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="studentLookingFor"> Looking For</label>
+                    <select class="form-control col-6" id="studentLookingFor">
+
+                        <option>Full-Time</option>
+                        <option>Part Time</option>
+                        <option>Summer Internship</option>
+                        <option>Spring Internship</option>
+                        <option>Fall Internship</option>
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="studentExperience"> Experience Level</label>
+                    <select class="form-control col-6" id="studentExperience">
+
+                        <option>3-5 Years</option>
+                        <option>5-10 Years</option>
+                        <option>10+ Years</option>
+                        <option>Any</option>
+                        <option>Entry Level</option>
+                        <option>College Senior</option>
+                        <option>College Junior</option>
+                        <option>College Freshman</option>
+                        <option>College Sophomore</option>
+
+                    </select>
+                <!--</div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="studentProfilePic">
+                        <label class="custom-file-label" for="studentProfilePic">Choose Profile Picture</label>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="uploadResume">
+                        <label class="custom-file-label" for="uploadResume">Choose Resume</label>
+                    </div>
+
+                </div>-->
+
+
+
+                <div class="form-group">
+                    <label for="studentBio">Add a short bio and let future employers know a little bit about you!</label>
+                    <textarea class="form-control col-6" id="studentBio" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btnSubmit" value="Submit" onclick="makeStudentProfile()" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

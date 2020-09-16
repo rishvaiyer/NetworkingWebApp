@@ -1,0 +1,252 @@
+﻿<!doctype html>
+
+
+
+<html lang="en">
+<head>
+
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+
+
+    <style>
+        .newJobForm {
+          margin: 0 auto;
+        width: 40%;
+        float: right;
+        margin-left: 0;
+     margin-top: -20px;
+     padding-top: -20px;
+         
+        }
+
+        .welcome {
+            font-size: 30px;
+            font-weight: bold;
+            color: steelblue;
+            padding-bottom: 20px;
+            text-align: center;
+            margin-bottom: 2%;
+        }
+
+        #myProfilePic {
+            height: 200px;
+            width: 200px;
+        }
+
+        #profilePic {
+            height: 200px;
+            width: 400px;
+            border-radius: 20px;
+            margin-left: 3%;
+        }
+
+
+        .myProfile {
+            float: left;
+            width:40%;
+            margin-left: 3%;
+            font-size: 20px;
+        }
+
+        .title {
+            color: steelblue;
+            font-weight: bold;
+            color: steelblue;
+
+        }
+
+        
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+
+    <script>
+   
+
+          
+
+        
+
+            function postJob() {
+
+                var activeString = localStorage.getItem("activeUser");
+                var companyName = JSON.parse(activeString).companyName;
+
+
+                var jobName = $("#jobName").val();
+                var jobHours = $("#jobHours").val();
+                var jobDescription = $("#jobDescription").val();
+                var jobSkills = $("#jobSkills").val();
+                var jobExperience = $("#jobExperience").val();
+
+                var jobString = localStorage.getItem("jobs");
+                jobObject = JSON.parse(jobString);
+
+                var newJob = {
+                    companyName: companyName,
+                    jobName: jobName,
+                    jobHours: jobHours,
+                    jobDescription: jobDescription,
+                    jobSkills: jobSkills,
+                    jobExperience: jobExperience,
+                };
+                //jobObject.push(newJob);
+                //var jobObjectString = JSON.stringify(jobObject);
+                //localStorage.setItem("jobs", jobObjectString);
+
+                $.post('/addjob', newJob)
+                    .done(function (data) {
+                        alert('Your new job ' + newJob.jobName + "has been posted!");
+                    });
+
+                $("#jobName").val("");
+                $("#jobHours").val("");
+                $("#jobDescription").val("");
+                $("#jobSkills").val("");
+                $("#jobExperience").val("");
+            }
+  
+
+        function logOff() {
+           // should clear active array if logoff button clicked.
+            // not super relevant though
+            // don't really know why it's not working correctly
+                var activeString = localStorage.getItem("active");
+                activeObject = JSON.parse(activeString);
+
+
+                activeObject.splice(0, 1);
+                alert(activeObject[0].companyName);
+
+        
+        };
+
+        $(document).ready(function () {
+            var activeUserType = localStorage.getItem("activeUserType");
+
+
+            if (activeUserType != "employer") {
+                alert('Sorry, you do not have access to this page. Log in as an employer for access.')
+                window.location.replace('studentDashboard.html');
+            }
+
+            else {
+                activeUser = JSON.parse(localStorage.getItem("activeUser"));
+                console.log(activeUser.companyName);
+                console.log(activeUser.companyEmail);
+
+
+                $(".myProfile").html("<span class='title'>Company Name:</span>" + "  " + activeUser.companyName + "<br>" +
+                    "<span class='title'> Email:</span>" + "  " + activeUser.companyEmail + "<br>" +
+                    "<span class='title'> About:</span>" + "  " + activeUser.companyBio + "<br> " +
+                    "<br><br>");
+                $(".welcome").html("Welcome, " + activeUser.companyName);
+                $(".myProfilePic").html("<img id='profilePic' src='" + activeUser.companyProfilePic + "'>");
+            }
+        });
+
+    </script>
+
+    <title></title>
+</head>
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">NETW0RK</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="employeeDashboard.html">Home</a></li>
+                <li><a href="myJobs.html">My Jobs</a></li>
+                <li><a href="Chat.html">Chat</a></li>
+               <li><a href="Tutorial.html">Tutorial</a></li>
+           
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="SignUp.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li id="logOff"><a href="index.html" onclick="logOff()"><span class="glyphicon glyphicon-log-in"></span> LogOff</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="welcome">
+
+        </div>
+
+        <div class="myProfilePic">
+
+        </div>
+
+        <div class="myProfile">
+
+
+        </div>
+
+        <div class="newJobForm">
+            <fieldset>
+                <legend> Post New Job</legend>
+                <div class="form-group">
+
+                    <label for="jobName">Job Name</label>
+                    <input type="text" class="form-control col-6" id="jobName" placeholder="Software Developer">
+                </div>
+                <div class="form-group">
+                    <label for="jobExperience">Experience Wanted</label>
+                    <select class="form-control col-6" id="jobExperience">
+
+                        <option>3-5 Years</option>
+                        <option>5-10 Years</option>
+                        <option>10+ Years</option>
+                        <option>Any</option>
+                        <option>Entry Level</option>
+                        <option>College Senior</option>
+                        <option>College Junior</option>
+                        <option>College Freshman</option>
+                        <option>College Sophomore</option>
+
+                    </select>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="jobHours">Job Type</label>
+                    <select class="form-control col-6" id="jobHours">
+                        <option>Full-Time</option>
+                        <option>Part Time</option>
+                        <option>Summer Internship</option>
+                        <option>Spring Internship</option>
+                        <option>Fall Internship</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="jobDescription">Job Description</label>
+                    <textarea class="form-control" rows="5" id="jobDescription"></textarea>
+                </div>
+
+
+                <button type="submit" class="btn btn-black" onclick="postJob()">Post Job</button>
+            </fieldset>
+        </div>
+    </div>
+
+
+   
+</body>
+
+
+</html>

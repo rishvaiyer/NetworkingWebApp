@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+
+
+    <style>
+        
+
+        .welcome {
+            font-size: 30px;
+            font-weight: bold;
+            color: steelblue;
+            margin-bottom: 5%;
+        }
+
+        .container {
+           margin-top: 10px;
+           padding-top: -20px;
+            width: 50%;
+        }
+
+        #profilePic {
+            height: 200px;
+            width: 200px;
+            border-radius: 20px;
+            margin-left: 3%;
+        }
+
+        .myProfile {
+            float: left;
+            margin-left: 3%;
+            font-size: 20px;
+        }
+
+        .title {
+            color: steelblue;
+            font-weight: bold;
+            color: steelblue;
+        }
+
+        .myInbox {
+            width: 50%;
+            float: right;
+            margin-right: 3%;
+        }
+
+        .welcome {
+          
+            width: 100%;
+            text-align:center;
+            font-size: 40px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+        var studentString = "";
+        $(document).ready(function () {
+            var activeUserType = localStorage.getItem("activeUserType");
+
+
+            if (activeUserType != "student") {
+                alert('Sorry, you do not have access to this page. Log in as an student for access.')
+                window.location.replace('employeeDashboard.html');
+            }
+            $.post("/grabAllJobs")
+                .done(function (data) {
+                    console.log(data);
+                    if (data == "notfound") {
+                        alert("fail");
+                    } else {
+
+
+                        var activeUser = JSON.parse(localStorage.getItem("activeUser"));
+                        var lookingFor = activeUser.studentLookingFor;
+                        var experienceLevel = activeUser.studentExperience;
+                        var count = 0;
+                        for (i = 0; i < data.length; i++) {
+
+                            if (data[i].jobHours == lookingFor) {
+                                count++;
+                               
+                            }
+                            if (data[i].jobExperience == experienceLevel) {
+                                count++;
+                                
+
+                            }
+
+
+                        }
+
+                        $(".badge").html(count);
+                     
+                       
+                    }
+                });
+
+
+            activeUser = JSON.parse(localStorage.getItem("activeUser"));
+            studentName = activeUser.studentName;
+         
+            $.post("/grabStudentInfo", { studentName: studentName })
+                .done(function (data) {
+                    console.log(data);
+                    if (data == "notfound") {
+                        alert("fail");
+                    } else {
+
+                        for (i = 0; i < data.length; i++) {
+                           
+                            studentString = "<span class='title'> Name:</span>" + "  " + data[i].studentName + "<br>" +
+                            "<span class='title'> Email:</span>" + "  " + data[i].studentEmail + "<br>" +
+                                "<span class='title'> Major:</span>" + "  " + data[i].studentMajor + "<br> " +
+                                "<span class='title'> Experience:</span>" + data[i].studentExperience + "<br>" +
+                                "<span class='title'> About Me:</span>" + "  " + data[i].studentBio + "<br>" +
+                                "<span class='title'> College:</span>" + "  " + data[i].studentCollege + "<br>" +
+                                "<span class='title'> I'm Looking For:</span>" + "  " + data[i].studentLookingFor + "<br>" +
+
+                                "<br><br>";
+
+
+
+                            $(".welcome").html("Welcome, " + data[i].studentName);
+                            $(".myProfilePic").html("<img id='profilePic' src='" + data[i].studentProfilePicLink + "'>")
+                        }
+                     
+                        $(".myProfile").html(studentString);
+                      
+                    }
+                });
+           
+        });
+
+       
+        
+    
+
+    </script>
+
+
+
+    <title></title>
+</head>
+            <body>
+                <nav class="navbar navbar-inverse">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">NETW0RK</a>
+                        </div>
+                        <ul class="nav navbar-nav">
+                            <li><a href="studentDashboard.html">Home</a></li>
+                            <li><a href="viewJobs.html">All Jobs</a></li>
+                            <li><a href="Chat.html">Chat</a></li>
+                            <li><a href="Inbox.html">Inbox <span class="badge"></span></a></li>
+                            <li><a href="Tutorial.html">Tutorial</a></li>
+
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="SignUp.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                            <li id="logOff"><a href="index.html" onclick="logOff()"><span class="glyphicon glyphicon-log-in"></span> LogOff</a></li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container">
+                    <div class="welcome">
+
+
+
+
+                    </div>
+                </div>
+
+                <div class="myProfilePic">
+                  
+
+                   
+                    </div>
+                <div class="myProfile">
+             
+                   
+
+                </div>
+
+                    
+</body>
+</html>

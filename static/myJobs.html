@@ -1,0 +1,151 @@
+﻿<!doctype html>
+
+
+
+<html lang="en">
+<head>
+
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+
+
+    <style>
+      
+
+        
+        .container {
+            margin: 2%;
+        }
+
+        .title{
+            color: steelblue;
+            font-weight:bold;
+
+        }
+
+        #jobs {
+            font-size: 15px;
+
+        }
+
+        #heading {
+            font-size: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            color:steelblue;
+            margin: 0 auto;
+        }
+
+        .name {
+            color:darkslategrey;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+
+    <script>
+        var jobString = "";
+        $(document).ready(function () {
+
+            var activeString = localStorage.getItem("activeEmployer");
+            activeObject = JSON.parse(activeString);
+
+            for (i = 0; i < activeObject.length; i++) {
+                $(".welcome").html("Welcome, " + activeObject[0].companyName).fadeIn();
+            }
+
+
+            var activeString = localStorage.getItem("activeUser");
+            var companyName = JSON.parse(activeString).companyName;
+            console.log(companyName);
+            $.post("/grabEmployerJobs", { companyName: companyName })
+                .done(function (data) {
+                    console.log(data);
+                    if (data == "notfound") {
+                        alert("fail");
+                    } else {
+
+                        for (i = 0; i < data.length; i++) {
+                            //Need to add job skills and hours 
+                            jobString += "<span class='title'>Company Name:</span>" + "  " + data[i].companyName + "<br>" +
+                                "<span class='title'>Job Title:</span>" + "  " + data[i].jobName + "<br>" +
+                                "<span class='title'>Job Type:</span>" + "  " + data[i].jobHours + "<br>" +
+                                "<span class='title'>Job Description:</span>" + "  " + data[i].jobDescription + "<br><br>";
+                            
+                        }
+                     
+                        $("#jobs").html(jobString);
+                        $("#heading").html("<fieldset> <legend>" + data[0].companyName + " " + "Jobs" +" </legend>");
+                    }
+                });
+
+        });
+
+
+     
+
+        //function logOff() {
+        //   // should clear active array if logoff button clicked.
+        //    // not super relevant though
+        //    // don't really know why it's not working correctly
+        //        var activeString = localStorage.getItem("active");
+        //        activeObject = JSON.parse(activeString);
+
+
+        //        activeObject.splice(0, 1);
+        //        alert(activeObject[0].companyName);
+
+
+        //};
+
+
+
+    </script>
+
+    <title></title>
+</head>
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">NETW0RK</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li ><a href="employeeDashboard.html">Home</a></li>
+                <li class="active"><a href="myJobs.html" >My Jobs</a></li>
+                <li><a href="Chat.html">Chat</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="SignUp.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li id="logOff"><a href="index.html" onclick="logOff()"><span class="glyphicon glyphicon-log-in"></span> LogOff</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+
+        <div id="heading">
+    
+        </div>
+        <div id="jobs">
+
+        </div>
+        
+
+
+
+    </div>
+</body>
+
+
+</html>

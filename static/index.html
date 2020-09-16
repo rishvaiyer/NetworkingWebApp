@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+
+
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <style>
+        .login-container {
+            margin-top: 5%;
+            margin-bottom: 5%;
+        }
+
+        .login-form-1 {
+            padding: 5%;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+        }
+
+            .login-form-1 h3 {
+                text-align: center;
+                color: #333;
+            }
+
+        .login-form-2 {
+            padding: 5%;
+            background: black;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+        }
+
+            .login-form-2 h3 {
+                text-align: center;
+                color: #fff;
+            }
+
+        .login-container form {
+            padding: 10%;
+        }
+
+        .btnSubmit {
+            width: 50%;
+            border-radius: 1rem;
+            padding: 1.5%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .login-form-1 .btnSubmit {
+            font-weight: 600;
+            color: #fff;
+            background-color: black;
+        }
+
+        .login-form-2 .btnSubmit {
+            font-weight: 600;
+            color: black;
+            background-color: #fff;
+        }
+
+        .alert {
+            display: none;
+        }
+
+
+        .signUpMessage {
+            color: white;
+        }
+
+        #networkHeader {
+            font-size: 40px;
+            text-align:center;
+            color: steelblue;
+            font-weight: bolder;
+            padding-top: 10px;
+        }
+    </style>
+
+    <script>
+
+        var activeEmployer = [];
+        var activeStudent = [];
+        function employerLogin() {
+
+
+
+            companyUsername = $("#companyUsername").val();
+            companyPassword = $("#companyPassword").val();
+            var logEmployeeArray = localStorage.getItem("employerArray");
+            logEmployeeArrayObject = JSON.parse(logEmployeeArray);
+
+            $.post("/loginemployer", {username: companyUsername, password: companyPassword})
+                .done(function (data) {
+                    console.log(data);
+                    if (data == "notfound") {
+                        alert("Incorrect username or password!");
+                    } else {
+                        localStorage.setItem("activeEmployer", JSON.stringify(data));
+                        localStorage.setItem("activeUser", JSON.stringify(data));
+                        localStorage.setItem("activeUserType", "employer");
+                        alert("Hello " + data.companyName + " you are now signed in");
+                        window.location.replace("employeeDashboard.html");
+                    }
+                });
+
+            //for (i = 0; i < logEmployeeArrayObject.length; i++) {
+            //    if (logEmployeeArrayObject[i].companyUsername === companyUsername &&
+            //        logEmployeeArrayObject[i].companyPassword === companyPassword) {
+            //        alert('Login Successful');
+
+
+            //        activeEmployer.push(logEmployeeArrayObject[i]);
+
+            //        var activeUserString = JSON.stringify(activeEmployer);
+            //        localStorage.setItem("activeEmployer", activeUserString);
+            //        window.open('employeeDashboard.html');
+            //    }
+            //    else {
+            //        alert('Incorrect username or password');
+            //    }
+
+            //}
+
+
+
+            }
+
+        function studentLogin() {
+
+
+            studentUsername = $("#studentUsername").val();
+            studentPassword = $("#studentPassword").val();
+
+
+                var logStudentArray = localStorage.getItem("studentArray");
+                logStudentArrayObject = JSON.parse(logStudentArray);
+
+            $.post("/loginstudent", { username: studentUsername, password: studentPassword })
+                .done(function (data) {
+                    if (data == "notfound") {
+                        alert("Incorrect username or password!");
+                    } else {
+                        localStorage.setItem("activeStudent", JSON.stringify(data));
+                        localStorage.setItem("activeUser", JSON.stringify(data));
+                        localStorage.setItem("activeUserType", "student");
+                        alert("Hello " + data.studentName + " you are now signed in");
+                        window.location.replace("studentDashboard.html");
+                    }
+                });
+
+
+            //    for (i = 0; i < logStudentArrayObject.length; i++) {
+            //        if (logStudentArrayObject[i].studentUsername === studentUsername &&
+            //            logStudentArrayObject[i].studentPassword === studentPassword) {
+
+            //            alert('Login Successful');
+
+            //            activeStudent.push(logStudentArrayObject[i]);
+
+            //            var activeUserString = JSON.stringify(activeStudent);
+            //            localStorage.setItem("activeStudent", activeUserString);
+
+
+            //            window.open('studentDashboard.html');
+            //        }
+            //        else {
+            //            alert('Incorrect username or password');
+            //        }
+
+            //}
+        };
+
+
+
+
+    </script>
+
+</head>
+<body>
+    <div id="networkHeader">
+        NETW0RK
+    </div>
+
+    <div class="container login-container">
+        <div class="row">
+            <div class="col-md-6 login-form-1">
+                <h3>Employer Login</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder=" username *" id="companyUsername" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="password *" id="companyPassword" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btnSubmit" value="Login" onclick="employerLogin()" />
+                    </div>
+                    <div class="form-group">
+                        Don't have an account? Click <a href="SignUp.html">Here </a> to sign up!
+                    </div>
+
+
+            </div>
+            <div class="col-md-6 login-form-2">
+                <h3>Student Login</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Your Username *" id="studentUsername" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Your Password *" id="studentPassword" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btnSubmit" value="Login" onclick="studentLogin()" />
+                    </div>
+                    <div class="form-group signUpMessage">
+                        Don't have an account? Click <a href="SignUp.html">Here </a> to sign up!
+                    </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
